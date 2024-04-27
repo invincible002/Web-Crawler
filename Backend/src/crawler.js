@@ -1,4 +1,3 @@
-import axios from "axios";
 import * as cheerio from "cheerio";
 import fetch from "node-fetch";
 import * as fs from "node:fs";
@@ -9,19 +8,18 @@ const seenUrls = {};
 const pageVisitLimit = 1;
 let pageVisitCount = 0;
 const stream = fs.createWriteStream("text/text-content.txt", { flags: "a" });
-const websiteToCrawl = "https://zethic.com";
 
-const getUrl = (link) => {
+const getUrl = (link, absoluteUrl) => {
   if (link.includes("http") && !link.endsWith("/")) {
     return link;
   } else if (link.startsWith("#")) {
-    return websiteToCrawl;
+    return absoluteUrl;
   } else if (link.endsWith("/")) {
-    return `${websiteToCrawl}`;
+    return `${absoluteUrl}`;
   } else if (link.startsWith("/")) {
-    return `${websiteToCrawl}${link}`;
+    return `${absoluteUrl}${link}`;
   } else {
-    return `${websiteToCrawl}/${link}`;
+    return `${absoluteUrl}/${link}`;
   }
 };
 
@@ -108,7 +106,7 @@ const extractText = async (html) => {
   return { cleanH1, cleanH2, cleanH3, cleanH4, cleanP };
 };
 
-const crawl = async (url) => {
+const crawl = async (url, absoluteUrl) => {
   try {
     if (seenUrls[url]) return;
     if (pageVisitCount >= pageVisitLimit) return;
@@ -140,9 +138,11 @@ const crawl = async (url) => {
 
     if (links.length > 0) {
       links
-        .filter((link) => getUrl(link).includes(parsedUrl.hostname))
+        .filter((link) =>
+          getUrl(link, absoluteUrl).includes(parsedUrl.hostname)
+        )
         .forEach((link) => {
-          crawl(getUrl(link));
+          crawl(getUrl(link, absoluteUrl));
         });
     }
   } catch (error) {
@@ -150,35 +150,18 @@ const crawl = async (url) => {
   }
 };
 
-crawl(websiteToCrawl);
+const crawlWebsite = async (req, res) => {
+  const website = req.params.website;
+  let websiteToCrawl;
+  if (!website) {
+    return res.status(400).json({ message: "Website is required" });
+  }
+  if (website == "zethic") {
+    websiteToCrawl = "https://zethic.com";
+  }
+  const absoluteUrl = websiteToCrawl;
 
-// fetch(url)
-// .then(async (response) => {
-//   const html = await response.text();
-//   const links = $("a")
-//     .map((i, links) => links.attribs.href)
-//     .get();
+  crawl(websiteToCrawl, absoluteUrl);
+};
 
-//   imageUrls.forEach((imageUrl) => {
-//     fetch(getUrl(imageUrl)).then((res) => {
-//       const filename = path.basename(imageUrl);
-//       const ext = path.extname(imageUrl);
-//       if (ext == ".png" || ext == ".svg" || ext == ".jpg") {
-//         const dest = fs.createWriteStream(`images/${filename}`);
-//         res.body.pipe(dest);
-//       }
-//     });
-//   });
-
-//   const { host } = urlParser.parse(url);
-
-//   links
-//     .filter((link) => getUrl(link).includes(host))
-//     .forEach((item) => {
-//       // console.log(item, "line 52");
-//       crawl(getUrl(item));
-//     });
-// })
-// .catch((error) => {
-//   console.log(error);
-// });
+export { crawlWebsite };
