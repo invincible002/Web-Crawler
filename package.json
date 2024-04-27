@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/invincible002/Web-Crawler#readme",
   "dependencies": {
+    "@google/generative-ai": "^0.8.0",
     "axios": "^1.6.8",
     "cheerio": "^1.0.0-rc.12",
     "node-fetch": "^3.3.2"

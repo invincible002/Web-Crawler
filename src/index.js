@@ -6,16 +6,22 @@ import * as path from "path";
 import * as urlParser from "url";
 
 const seenUrls = {};
-const pageVisitLimit = 10;
+const pageVisitLimit = 1;
 let pageVisitCount = 0;
+const stream = fs.createWriteStream("text/text-content.txt", { flags: "a" });
+const websiteToCrawl = "https://zethic.com";
 
 const getUrl = (link) => {
-  if (link.includes("http")) {
+  if (link.includes("http") && !link.endsWith("/")) {
     return link;
+  } else if (link.startsWith("#")) {
+    return websiteToCrawl;
+  } else if (link.endsWith("/")) {
+    return `${websiteToCrawl}`;
   } else if (link.startsWith("/")) {
-    return `http://localhost:10000/${link}`;
+    return `${websiteToCrawl}${link}`;
   } else {
-    return `http://localhost:10000/${link}`;
+    return `${websiteToCrawl}/${link}`;
   }
 };
 
@@ -66,11 +72,40 @@ const saveImages = async (images, folderpath) => {
 
 const saveText = async (content, filePath) => {
   try {
-    await fs.promises.writeFile(filePath, content);
+    await stream.write(content);
     console.log("Text content saved successfully.");
   } catch (error) {
     console.error("Error saving text content:", error);
   }
+};
+
+const extractText = async (html) => {
+  const $ = cheerio.load(html);
+  const h1Tags = $("h1")
+    .map((i, h) => h)
+    .text();
+  const h2Tags = $("h2")
+    .map((i, h) => h)
+    .text();
+
+  const h3Tags = $("h3")
+    .map((i, h) => h)
+    .text();
+  const h4Tags = $("h4")
+    .map((i, h) => h)
+    .text();
+
+  const pTags = $("p")
+    .map((i, h) => h)
+    .text();
+
+  const cleanH1 = h1Tags.replace(/(\r\n|\n|\r)/gm, "").trim();
+  const cleanH2 = h2Tags.replace(/(\r\n|\n|\r)/gm, "").trim();
+  const cleanH3 = h3Tags.replace(/(\r\n|\n|\r)/gm, "").trim();
+  const cleanH4 = h4Tags.replace(/(\r\n|\n|\r)/gm, "").trim();
+  const cleanP = pTags.replace(/(\r\n|\n|\r)/gm, "").trim();
+
+  return { cleanH1, cleanH2, cleanH3, cleanH4, cleanP };
 };
 
 const crawl = async (url) => {
@@ -91,11 +126,15 @@ const crawl = async (url) => {
 
     const images = await extractImages(html);
 
-    const $ = cheerio.load(html);
-
-    const textContent = $("body").text();
-    await saveImages(images, "images/");
-    await saveText(textContent, path.join("text/", "text-content.txt"));
+    const { cleanH1, cleanH2, cleanH3, cleanH4, cleanP } = await extractText(
+      html
+    );
+    // await saveImages(images, "images/");
+    await saveText(cleanH1, path.join("text/", "text-content.txt"));
+    await saveText(cleanH2, path.join("text/", "text-content.txt"));
+    await saveText(cleanH3, path.join("text/", "text-content.txt"));
+    await saveText(cleanH4, path.join("text/", "text-content.txt"));
+    await saveText(cleanP, path.join("text/", "text-content.txt"));
 
     const parsedUrl = urlParser.parse(url);
 
@@ -111,7 +150,7 @@ const crawl = async (url) => {
   }
 };
 
-crawl("http://localhost:10000");
+crawl(websiteToCrawl);
 
 // fetch(url)
 // .then(async (response) => {
