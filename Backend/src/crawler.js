@@ -7,7 +7,6 @@ import * as urlParser from "url";
 const seenUrls = {};
 const pageVisitLimit = 1;
 let pageVisitCount = 0;
-const stream = fs.createWriteStream("text/text-content.txt", { flags: "a" });
 
 const getUrl = (link, absoluteUrl) => {
   if (link.includes("http") && !link.endsWith("/")) {
@@ -70,6 +69,12 @@ const saveImages = async (images, folderpath) => {
 
 const saveText = async (content, filePath) => {
   try {
+    const stream = await fs.createWriteStream(
+      "../Backend/text/text-content.txt",
+      {
+        flags: "a",
+      }
+    );
     await stream.write(content);
     console.log("Text content saved successfully.");
   } catch (error) {
@@ -128,6 +133,7 @@ const crawl = async (url, absoluteUrl) => {
       html
     );
     // await saveImages(images, "images/");
+    await fs.writeFileSync("../Backend/text/text-content.txt", "");
     await saveText(cleanH1, path.join("text/", "text-content.txt"));
     await saveText(cleanH2, path.join("text/", "text-content.txt"));
     await saveText(cleanH3, path.join("text/", "text-content.txt"));
@@ -161,7 +167,9 @@ const crawlWebsite = async (req, res) => {
   }
   const absoluteUrl = websiteToCrawl;
 
-  crawl(websiteToCrawl, absoluteUrl);
+  await crawl(websiteToCrawl, absoluteUrl);
+
+  return res.status(200).json({ message: "Crawled Successfully" });
 };
 
 export { crawlWebsite };

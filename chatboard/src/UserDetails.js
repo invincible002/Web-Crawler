@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useUserAuth } from "./context/UserContext";
 
 export default function UserDetails() {
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    website: "",
-  });
+  const { user, setUser } = useUserAuth();
+
   const [errorMsg, setErrorMsg] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setUser({
@@ -23,9 +23,13 @@ export default function UserDetails() {
       return;
     }
 
-    axios.get(`http://localhost:8000/crawl/${user.website}`).then((res) => {
-      console.log(res);
-    });
+    axios
+      .post(`http://localhost:8000/crawl/${user.website}`, { user })
+      .then((res) => {
+        if (res.status == 200) {
+          navigate("/chatboard");
+        }
+      });
   };
   return (
     <div>
