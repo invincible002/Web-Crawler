@@ -32,7 +32,7 @@ export default function UserDetails() {
       });
   };
   return (
-    <div>
+    <div className="col-10 user_detail_wrapper">
       <div class="container" id="container">
         <div class="form-container sign-up">
           <form>
@@ -67,6 +67,7 @@ export default function UserDetails() {
             <select name="website" id="crawl" onChange={handleChange}>
               <option value="select">Select an option</option>
               <option value="zethic">Zethic Technologies</option>
+              <option value="localhost">localhost:10000</option>
             </select>
             <button onClick={submitHandler}>Let's Crawl!!</button>
           </form>

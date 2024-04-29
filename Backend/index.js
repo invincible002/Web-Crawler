@@ -5,6 +5,7 @@ import cors from "cors";
 import { AIComponent } from "./src/AIComponent.js";
 import connectDB from "./src/db/index.js";
 import { getUser } from "./src/middleware/user.middleware.js";
+import { getAllUsers } from "./src/getAllUsers.js";
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,8 @@ app.post("/crawl/:website", getUser, crawlWebsite);
 app.post("/chat", getUser, AIComponent);
 
 app.post("/currentUser", getUser);
+
+app.get("/get-all-users", getAllUsers);
 
 app.listen(process.env.PORT || 8000, async () => {
   console.log(`Server running on localhost:${process.env.PORT || 8000}`);

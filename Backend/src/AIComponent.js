@@ -3,10 +3,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { User } from "./models/user.modal.js";
 
 // Access your API key as an environment variable (see "Set up your API key" above)
-const genAI = new GoogleGenerativeAI("AIzaSyBBeQeLGxbzHWp3MAmJD1g5lvTpe2ONtFs");
 
 async function AIComponent(req, res) {
   // For text-only input, use the gemini-pro model
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
   const user = req.body?.user;
   const newMesgs = req.body?.chat;
   const model = genAI.getGenerativeModel({ model: "gemini-pro" });
@@ -48,6 +48,7 @@ async function AIComponent(req, res) {
       },
       {
         $inc: { queryCount: 1 },
+        $set: { updatedAt: new Date() },
       }
     );
     return res.status(200).json({ message: text });

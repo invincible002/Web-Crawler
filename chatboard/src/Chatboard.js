@@ -48,74 +48,83 @@ export default function Chatboard() {
 
   const { user, setUser } = useUserAuth();
   return (
-    <div>
-      <div className="chatboar_wrapper">
-        <div className="chatboard">
-          <div className="chat_header">
-            <h4>Chat</h4>
-          </div>
-          <div className="chat_screen">
-            {chat.map((c, index) => {
-              return (
-                <>
-                  {c.role == "user" ? (
-                    <div key={index} className="mesgR">
-                      <div className="mesg_right">
-                        <p>{c?.parts[0].text}</p>
+    <div className="col-10">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <div className="chatboar_wrapper">
+          <div className="chatboard">
+            <div className="chat_header">
+              <h4>Chat</h4>
+            </div>
+            <div className="chat_screen">
+              {chat.map((c, index) => {
+                return (
+                  <>
+                    {c.role == "user" ? (
+                      <div key={index} className="mesgR">
+                        <div className="mesg_right">
+                          <p>{c?.parts[0].text}</p>
+                        </div>
+                        <i
+                          class="fa-solid fa-circle-user fa-2xl"
+                          style={{
+                            color: "#059429",
+                            padding: "8px",
+                            lineHeight: "15px",
+                          }}
+                        ></i>
                       </div>
-                      <i
-                        class="fa-solid fa-circle-user fa-2xl"
-                        style={{
-                          color: "#059429",
-                          padding: "8px",
-                          lineHeight: "15px",
-                        }}
-                      ></i>
-                    </div>
-                  ) : (
-                    <div key={index} className="mesgL">
-                      <i
-                        class="fa-solid fa-robot fa-xl"
-                        style={{ color: "#1100ef", padding: "8px" }}
-                      ></i>{" "}
-                      <div className="mesg_left">
-                        <p>{c?.parts[0].text}</p>
+                    ) : (
+                      <div key={index} className="mesgL">
+                        <i
+                          class="fa-solid fa-robot fa-xl"
+                          style={{ color: "#1100ef", padding: "8px" }}
+                        ></i>{" "}
+                        <div className="mesg_left">
+                          <p>{c?.parts[0].text}</p>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </>
-              );
-            })}
-            {loading && (
-              <div className="mesgL">
-                <i
-                  class="fa-solid fa-robot fa-xl"
-                  style={{ color: "#1100ef", padding: "8px" }}
-                ></i>{" "}
-                <div className="mesg_left">
-                  <p>. . .</p>
+                    )}
+                  </>
+                );
+              })}
+              {loading && (
+                <div className="mesgL">
+                  <i
+                    class="fa-solid fa-robot fa-xl"
+                    style={{ color: "#1100ef", padding: "8px" }}
+                  ></i>{" "}
+                  <div className="mesg_left">
+                    <p>. . .</p>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-          <div className="chat_write">
-            <input
-              type="text"
-              placeholder="Type your message"
-              onChange={handleMesg}
-              value={mesg.parts[0].text}
-              onKeyDown={(e) => {
-                if (e.key == "Enter") {
-                  handleChat();
-                }
-              }}
-            ></input>
-            <button className="send_btn" onClick={handleChat}>
-              <i
-                class="fa-solid fa-paper-plane"
-                style={{ color: "#ffffff" }}
-              ></i>{" "}
-            </button>
+              )}
+            </div>
+            <div className="chat_write">
+              <input
+                type="text"
+                placeholder="Type your message"
+                onChange={handleMesg}
+                value={mesg.parts[0].text}
+                onKeyDown={(e) => {
+                  if (e.key == "Enter") {
+                    handleChat();
+                  }
+                }}
+              ></input>
+              <button className="send_btn" onClick={handleChat}>
+                <i
+                  class="fa-solid fa-paper-plane"
+                  style={{ color: "#ffffff" }}
+                ></i>{" "}
+              </button>
+            </div>
           </div>
         </div>
       </div>

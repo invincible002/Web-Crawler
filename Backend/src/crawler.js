@@ -69,12 +69,9 @@ const saveImages = async (images, folderpath) => {
 
 const saveText = async (content, filePath) => {
   try {
-    const stream = await fs.createWriteStream(
-      "../Backend/text/text-content.txt",
-      {
-        flags: "a",
-      }
-    );
+    const stream = await fs.createWriteStream("./text/text-content.txt", {
+      flags: "a",
+    });
     await stream.write(content);
     console.log("Text content saved successfully.");
   } catch (error) {
@@ -114,7 +111,7 @@ const extractText = async (html) => {
 const crawl = async (url, absoluteUrl) => {
   try {
     if (seenUrls[url]) return;
-    if (pageVisitCount >= pageVisitLimit) return;
+    if (pageVisitCount > pageVisitLimit) return;
 
     pageVisitCount++;
     console.log("crawling", url);
@@ -164,6 +161,8 @@ const crawlWebsite = async (req, res) => {
   }
   if (website == "zethic") {
     websiteToCrawl = "https://zethic.com";
+  } else {
+    websiteToCrawl = "http://localhost:10000";
   }
   const absoluteUrl = websiteToCrawl;
 
