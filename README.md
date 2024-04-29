@@ -13,11 +13,18 @@ Chatboard (Front End)
     Step 2. Install dependencies (npm install )
     Step 3. Start the development server (npm start )
 
+Minimum Requirement
+  1. Node version :- Node.js v18+
 
-Note:- 
-     For the AI Component i am using google's GoogleGenerativeAI api with its free version. 
-       In Free version i am allowed around
+Future Scope
+  1. Images are also being crawled and saved into the system and we can use different AI model to work with Images. Currently i am using gemini-pro.
+
+
+Note:-
+     For the AI Component i am using google's GoogleGenerativeAI api with its free version. In Free version i am allowed around
+     
        1. 2 RPM (requests per minute), 
        2. 32,000 TPM (tokens per minute),
        3. 50 RPD (requests per day)
+       
     Therefore, this project will not crawl the whole website because it may create a large data that can go beyond above constraints.
