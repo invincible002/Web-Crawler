@@ -1,11 +1,12 @@
 import dotenv from "dotenv";
 import express from "express";
-import { crawlWebsite } from "./src/crawler.js";
 import cors from "cors";
-import { AIComponent } from "./src/AIComponent.js";
 import connectDB from "./src/db/index.js";
 import { getUser } from "./src/middleware/user.middleware.js";
-import { getAllUsers } from "./src/getAllUsers.js";
+import { crawlWebsite } from "./src/controllers/crawler.js";
+import { AIComponent } from "./src/controllers/AIComponent.js";
+import { getAllUsers } from "./src/controllers/getAllUsers.js";
+import { chatHistory } from "./src/controllers/chatHistory.js";
 
 dotenv.config();
 const app = express();
@@ -20,11 +21,13 @@ app.use(cors(corsOptions));
 
 app.post("/crawl/:website", getUser, crawlWebsite);
 
-app.post("/chat", getUser, AIComponent);
+app.post("/chat/:website", getUser, AIComponent);
 
 app.post("/currentUser", getUser);
 
 app.get("/get-all-users", getAllUsers);
+
+app.post("/get-user-chat", getUser, chatHistory);
 
 app.listen(process.env.PORT || 8000, async () => {
   console.log(`Server running on localhost:${process.env.PORT || 8000}`);

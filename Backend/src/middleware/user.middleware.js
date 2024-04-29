@@ -1,8 +1,8 @@
 import { User } from "../models/user.modal.js";
 
 const getUser = async (req, res, next) => {
-  const name = req.body.user.name;
-  const email = req.body.user.email;
+  const name = req.body.user?.name;
+  const email = req.body.user?.email;
   let user;
   try {
     user = await User.findOne({ email });

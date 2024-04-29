@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useUserAuth } from "./context/UserContext";
 import axios from "axios";
 
@@ -9,7 +9,8 @@ export default function Chatboard() {
   });
   const [chat, setChat] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const { user, setUser } = useUserAuth();
+  const scrollDown = useRef(null);
   const handleMesg = (e) => {
     setMesg({
       role: "user",
@@ -27,7 +28,7 @@ export default function Chatboard() {
     if (chat.length && chat[chat.length - 1]?.role == "user") {
       setLoading(true);
       axios
-        .post("http://localhost:8000/chat", { chat, user })
+        .post(`http://localhost:8000/chat/${user.website}`, { chat, user })
         .then((res) => {
           setLoading(false);
           setChat([
@@ -46,7 +47,29 @@ export default function Chatboard() {
     }
   }, [chat]);
 
-  const { user, setUser } = useUserAuth();
+  useEffect(() => {
+    scrollDown.current?.scrollIntoView({ behavior: "smooth" });
+  });
+
+  useEffect(() => {
+    setLoading(true);
+    if (!chat.length && user.email) {
+      axios
+        .post("http://localhost:8000/get-user-chat", { user })
+        .then((res) => {
+          if (res.status == 200) {
+            setLoading(false);
+            setChat(res.data);
+            console.log(res.data);
+          }
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.log(error);
+        });
+    }
+  }, []);
+
   return (
     <div className="col-10">
       <div
@@ -105,6 +128,7 @@ export default function Chatboard() {
                   </div>
                 </div>
               )}
+              <div ref={scrollDown}></div>
             </div>
             <div className="chat_write">
               <input

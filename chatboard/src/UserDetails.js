@@ -67,7 +67,7 @@ export default function UserDetails() {
             <select name="website" id="crawl" onChange={handleChange}>
               <option value="select">Select an option</option>
               <option value="zethic">Zethic Technologies</option>
-              <option value="localhost">localhost:10000</option>
+              <option value="Adivid">Adivid Technologies</option>
             </select>
             <button onClick={submitHandler}>Let's Crawl!!</button>
           </form>

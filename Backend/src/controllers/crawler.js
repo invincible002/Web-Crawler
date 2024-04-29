@@ -5,13 +5,13 @@ import * as path from "path";
 import * as urlParser from "url";
 
 const seenUrls = {};
-const pageVisitLimit = 1;
+const pageVisitLimit = 4;
 let pageVisitCount = 0;
 
 const getUrl = (link, absoluteUrl) => {
   if (link.includes("http") && !link.endsWith("/")) {
     return link;
-  } else if (link.startsWith("#")) {
+  } else if (link.startsWith("#") || link.includes("mailto:")) {
     return absoluteUrl;
   } else if (link.endsWith("/")) {
     return `${absoluteUrl}`;
@@ -142,7 +142,7 @@ const crawl = async (url, absoluteUrl) => {
     if (links.length > 0) {
       links
         .filter((link) =>
-          getUrl(link, absoluteUrl).includes(parsedUrl.hostname)
+          getUrl(link, absoluteUrl)?.includes(parsedUrl.hostname)
         )
         .forEach((link) => {
           crawl(getUrl(link, absoluteUrl));
@@ -155,6 +155,7 @@ const crawl = async (url, absoluteUrl) => {
 
 const crawlWebsite = async (req, res) => {
   const website = req.params.website;
+  const user = req.body.user;
   let websiteToCrawl;
   if (!website) {
     return res.status(400).json({ message: "Website is required" });
@@ -162,7 +163,7 @@ const crawlWebsite = async (req, res) => {
   if (website == "zethic") {
     websiteToCrawl = "https://zethic.com";
   } else {
-    websiteToCrawl = "http://localhost:10000";
+    websiteToCrawl = "https://adivid.com";
   }
   const absoluteUrl = websiteToCrawl;
 
