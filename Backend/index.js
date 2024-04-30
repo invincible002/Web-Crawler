@@ -30,7 +30,7 @@ app.get("/get-all-users", getAllUsers);
 
 app.post("/get-user-chat", getUser, chatHistory);
 
-app.get("/user-analytics", userAnalytics);
+app.get("/user-analytics", userAnalytics); // will also create the UI for this but currently it logs total number of users joined in which month
 
 app.listen(process.env.PORT || 8000, async () => {
   console.log(`Server running on localhost:${process.env.PORT || 8000}`);
