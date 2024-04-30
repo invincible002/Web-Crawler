@@ -7,6 +7,7 @@ import { crawlWebsite } from "./src/controllers/crawler.js";
 import { AIComponent } from "./src/controllers/AIComponent.js";
 import { getAllUsers } from "./src/controllers/getAllUsers.js";
 import { chatHistory } from "./src/controllers/chatHistory.js";
+import { userAnalytics } from "./src/controllers/userAnalytics.js";
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,8 @@ app.post("/currentUser", getUser);
 app.get("/get-all-users", getAllUsers);
 
 app.post("/get-user-chat", getUser, chatHistory);
+
+app.get("/user-analytics", userAnalytics);
 
 app.listen(process.env.PORT || 8000, async () => {
   console.log(`Server running on localhost:${process.env.PORT || 8000}`);
