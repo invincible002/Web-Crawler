@@ -28,3 +28,19 @@ Note:-
        3. 50 RPD (requests per day)
        
     Therefore, this project will not crawl the whole website because it may create a large data that can go beyond above constraints.
+
+
+Tech Stack
+  1. React
+  2. Node
+  4. MongoDB
+     
+Library
+  1. Express
+  2. Axios
+  3. Cheerio
+  4. Node-fetch
+  5. Dotenv
+  6. Cors
+  7. Nodemon
+  8. React-router-dom
