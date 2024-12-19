@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useUserAuth } from "./context/UserContext";
+import { useUserAuth } from "../context/UserContext";
 import axios from "axios";
 
 export default function Chatboard() {

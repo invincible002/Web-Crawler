@@ -8,26 +8,24 @@ import {
   Navigate,
 } from "react-router-dom";
 import { UserContext } from "./context/UserContext";
-import Chatboard from "./Chatboard";
+import Chatboard from "./pages/Chatboard";
 import Sidebar from "./components/Sidebar";
-import Dashboard from "./Dashboard";
+import Dashboard from "./pages/Dashboard";
+import Analytics from "./pages/Analytics";
 
 export default function App() {
   return (
-    <div>
-      <div className="row">
-        <Router>
-          <UserContext>
-            <Sidebar />
-            <Routes>
-              <Route path="/" element={<UserDetails />} />
-              <Route path="/chatboard" element={<Chatboard />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </UserContext>
-        </Router>
-      </div>
-    </div>
+    <Router>
+      <UserContext>
+        <Sidebar />
+        <Routes>
+          <Route path="/" element={<UserDetails />} />
+          <Route path="/chatboard" element={<Chatboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </UserContext>
+    </Router>
   );
 }
