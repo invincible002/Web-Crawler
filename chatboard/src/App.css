@@ -6,11 +6,16 @@
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
 }
-
+#root{
+    width: 100%;
+    display: flex;
+}
+.row{
+}
 body{
     background-color: #c9d6ff;
     background: linear-gradient(to right, #e2e2e2, #c9d6ff);
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 .user_detail_wrapper{
     height: 100vh;
@@ -314,10 +319,9 @@ body{
 
 /* ---------------sidebar----------------- */
 
-.sidebar_wrapper{
-    height: 100vh;
-    background-color: #512da8;
-}
+.sidebar_wrapper {
+    flex: 0 0 250px; /* Fixed width for the sidebar */
+  } 
 .list{
     display: flex;
     flex-direction: column;

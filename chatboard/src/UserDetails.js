@@ -37,7 +37,7 @@ export default function UserDetails() {
         <div class="form-container sign-up">
           <form>
             <h1>Let's Get Started</h1>
-            <div class="social-icons">
+            {/* <div class="social-icons">
               <a href="#" class="icon">
                 <i class="fa-brands fa-google-plus-g"></i>
               </a>
@@ -50,7 +50,7 @@ export default function UserDetails() {
               <a href="#" class="icon">
                 <i class="fa-brands fa-linkedin-in"></i>
               </a>
-            </div>
+            </div> */}
             <input
               type="text"
               name="name"
